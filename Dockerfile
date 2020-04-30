@@ -20,15 +20,14 @@ RUN apt-get update && apt-get install -y \
     python \
     imagemagick \
     wget \
-    subversion
+    subversion \
+    mrtrix \
+    ants
 
 # Install mrtrix and ants
 RUN apt-get update && apt-get install -y \
   mrtrix \
   ants
-
-# Add mrtrix and ants to the system path
-# ENV PATH /usr/lib/ants:/usr/lib/mrtrix/bin:$PATH
 
 # ADD the dtiInit Matlab Stand-Alone (MSA) into the container.
 COPY src/bin/AFQ_StandAlone_QMR /usr/local/bin/AFQ
