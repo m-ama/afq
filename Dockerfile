@@ -3,7 +3,15 @@
 # Start with the Matlab r2013b runtime container
 FROM vistalab/mcr-v82
 
-MAINTAINER Michael Perry <lmperry@stanford.edu>
+LABEL maintainer="Siddhartha Dhiman (dhiman@musc.edu)"
+LABEL org.label-schema.schema-version="1.0.0-rc1"
+LABEL org.label-schema.build-date=$BUILD_DATE
+LABEL org.label-schema.name="dmri/afq"
+LABEL org.label-schema.description="AFQ Pipeline for Docker"
+LABEL org.label-schema.url="https://github.com/m-ama/"
+LABEL org.label-schema.vcs-url="https://github.com/m-ama/afq.git"
+LABEL org.label-schema.vcs-ref=$VCS_REF
+LABEL org.label-schema.vendor="MAMA"
 
 # Install XVFB and other dependencies
 RUN apt-get update && apt-get install -y xvfb \
@@ -18,7 +26,7 @@ RUN apt-get update && apt-get install -y xvfb \
     subversion
 
 # Configure neurodebian repo
-RUN wget -O- http://neuro.debian.net/lists/trusty.us-nh.full | tee /etc/apt/sources.list.d/neurodebian.sources.list
+RUN wget -O- http://neuro.debian.net/lists/trusty.us-tn.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
 RUN apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9
 
 # Install mrtrix and ants
@@ -44,21 +52,5 @@ RUN mkdir $TEMPLATES
 RUN svn export --force https://github.com/yeatmanlab/AFQ.git/trunk/templates/ $TEMPLATES
 RUN svn export --force https://github.com/vistalab/vistasoft.git/trunk/mrDiffusion/templates/ $TEMPLATES
 
-# Make directory for flywheel spec (v0)
-ENV FLYWHEEL /flywheel/v0
-RUN mkdir -p ${FLYWHEEL}
-
-# Copy and configure run script and metadata code
-COPY run ${FLYWHEEL}/run
-RUN chmod +x ${FLYWHEEL}/run
-COPY manifest.json ${FLYWHEEL}/manifest.json
-ADD https://raw.githubusercontent.com/scitran/utilities/daf5ebc7dac6dde1941ca2a6588cb6033750e38c/metadata_from_gear_output.py ${FLYWHEEL}/metadata_create.py
-RUN chmod +x ${FLYWHEEL}/metadata_create.py
-COPY src/parse_config.py ${FLYWHEEL}/parse_config.py
-RUN chmod +x ${FLYWHEEL}/parse_config.py
-
-# Configure entrypoint
-ENTRYPOINT ["/flywheel/v0/run"]
-
-# Set the diplay env variable for xvfb
-ENV DISPLAY :1.0
+# Add entrypoint for AFQ
+ENTRYPOINT [ "AFQ" ]
