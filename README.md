@@ -1,6 +1,23 @@
-[![Docker Pulls](https://img.shields.io/docker/pulls/scitran/afq.svg)](https://hub.docker.com/r/scitran/afq/)
-[![Docker Stars](https://img.shields.io/docker/stars/scitran/afq.svg)](https://hub.docker.com/r/scitran/afq/)
+![Docker Pulls](https://img.shields.io/docker/pulls/dmri/afq)
+![Docker Stars](https://img.shields.io/docker/stars/dmri/afq)
 
-## scitran-apps/afq
 
-Build context for a [Flywheel Gear](https://github.com/flywheel-io/gears/tree/master/spec) that can run the [AFQ](https://github.com/jyeatman/AFQ) pipeline.
+## dmri/afq
+
+Docker build context for the AFQ pipeline.
+
+## Install
+Issue the following command in CLI to pull the latest AFQ pipeline compatible with Docker.
+
+```
+docker pull dmri/afq
+```
+
+## Run
+AFQ container may be called with
+
+```
+docker run -it --rm \
+    -v [SOURCE PATH]:[DESTINATION PATH]
+    dmr/afq [PATH TO dt6.mat]
+```
