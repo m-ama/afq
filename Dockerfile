@@ -14,10 +14,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 LABEL org.label-schema.vendor="MAMA"
 
 # Install XVFB and other dependencies
-RUN apt-get update && apt-get install -y xvfb \
-    xfonts-100dpi \
-    xfonts-75dpi \
-    xfonts-cyrillic \
+RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     python \
@@ -25,17 +22,13 @@ RUN apt-get update && apt-get install -y xvfb \
     wget \
     subversion
 
-# Configure neurodebian repo
-RUN wget -O- http://neuro.debian.net/lists/trusty.us-tn.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-RUN apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9
-
 # Install mrtrix and ants
 RUN apt-get update && apt-get install -y \
   mrtrix \
   ants
 
 # Add mrtrix and ants to the system path
-ENV PATH /usr/lib/ants:/usr/lib/mrtrix/bin:$PATH
+# ENV PATH /usr/lib/ants:/usr/lib/mrtrix/bin:$PATH
 
 # ADD the dtiInit Matlab Stand-Alone (MSA) into the container.
 COPY src/bin/AFQ_StandAlone_QMR /usr/local/bin/AFQ
